@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class JuzData {
   final double progress;
   final int currentPage;
+  
 
   JuzData({required this.progress, required this.currentPage});
 }
@@ -103,6 +104,15 @@ class JuzProgressProvider extends ChangeNotifier {
       _globalJuzMap[juzNumber] = JuzData(progress: 0.0, currentPage: 0);
       _saveJuzProgressToStorage(
           juzNumber, 0.0, 0); // Save reset progress to SharedPreferences
+      notifyListeners();
+    }
+  }
+
+   void markJuzComplete(int juzNumber) {
+    if (_globalJuzMap.containsKey(juzNumber)) {
+      _globalJuzMap[juzNumber] = JuzData(progress: 100.0, currentPage: 0);
+       _saveJuzProgressToStorage(
+          juzNumber, 100.0, 0);
       notifyListeners();
     }
   }

@@ -11,7 +11,8 @@ class juzCardModel with ChangeNotifier {
   // late Box surahbox;
   late int juzNumber;
   // late String boxName;
-  bool shouldReset = false;
+  bool isResetCheck = false;
+  bool isMarkCompletedCheck = false;
 
   juzCardModel(
     int surahNumber,
@@ -20,10 +21,24 @@ class juzCardModel with ChangeNotifier {
     // this.boxName = boxName;
     // initBox(surahNumber);
   }
+  void resetJuzCheckMethod(bool value) {
+    isResetCheck = value;
+    if (value) {
+      isMarkCompletedCheck = false;
+      notifyListeners();
+    } else {
+      notifyListeners();
+    }
+  }
 
-  void updateShouldReset(bool value) {
-    shouldReset = value;
-    notifyListeners();
+  void markCompletedCheck(bool value) {
+    isMarkCompletedCheck = value;
+    if (value) {
+      isResetCheck = false;
+      notifyListeners();
+    } else {
+      notifyListeners();
+    }
   }
 
   Future<void> onListTileClicked(

@@ -49,7 +49,7 @@ class JuzCard extends StatelessWidget {
                 },
                 onLongPress: () {
                   // juzProgressModel.resetSelectedJuzProgress(juzNumber);
-                  resetButtonClicked(context, model);
+                  onLongPressedToResetOrCompleteJuz(context, model);
                 },
                 child: badges.Badge(
                   // badgeAnimation: !isJuzFinished
@@ -106,15 +106,15 @@ class JuzCard extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white70, fontWeight: FontWeight.bold),
                 ),
-                backgroundColor: Colors.black26
-                ),
+                backgroundColor: Colors.black26),
           ],
         ),
       ),
     );
   }
 
-  Future<dynamic> resetButtonClicked(BuildContext context, juzCardModel model) {
+  Future<dynamic> onLongPressedToResetOrCompleteJuz(
+      BuildContext context, juzCardModel model) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -122,21 +122,51 @@ class JuzCard extends StatelessWidget {
           content: StatefulBuilder(builder: (thisLowerContext, innerSetState) {
             return Column(
               mainAxisSize: MainAxisSize.min,
+              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                        value: model.shouldReset,
-                        onChanged: (val) {
-                          innerSetState(() {
-                            model.updateShouldReset(val!);
-                          });
-                        }),
-                    Column(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Are you Sure '),
-                        Text('You Want to Reset ???')
+                        Checkbox(
+                            value: model.isResetCheck,
+                            onChanged: (val) {
+                              innerSetState(() {
+                                model.resetJuzCheckMethod(val!);
+                              });
+                            }),
+                        Column(
+                          children: [
+                            Text('Reset Juz'),
+                            // Text('You Want to Reset ???')
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                            value: model.isMarkCompletedCheck,
+                            onChanged: (val) {
+                              innerSetState(() {
+                                model.markCompletedCheck(val!);
+                              });
+                            }),
+                        Column(
+                          children: [
+                            Text('Mark Juz completed'),
+                            // Text('')
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -149,17 +179,18 @@ class JuzCard extends StatelessWidget {
                   return Column(
                     children: [
                       Visibility(
-                        visible: !model.shouldReset,
+                        visible: model.isResetCheck,
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 AppColors.primaryColor),
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            onResetbuttonClicked(model, juzProgressModel,
+                                innerSetState, context);
                           },
                           child: Text(
-                            'Close',
+                            'RESET',
                             style: TextStyle(
                                 color: AppColors.seconderyColor,
                                 fontWeight: FontWeight.bold),
@@ -167,24 +198,18 @@ class JuzCard extends StatelessWidget {
                         ),
                       ),
                       Visibility(
-                        visible: model.shouldReset,
+                        visible: model.isMarkCompletedCheck,
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 AppColors.primaryColor),
                           ),
                           onPressed: () {
-                            if (model.shouldReset) {}
-                            // juzProgressModel.resetAllJuzProgress();
-                            juzProgressModel
-                                .resetSelectedJuzProgress(juzNumber);
-                            innerSetState(() {
-                              model.updateShouldReset(false);
-                            });
-                            Navigator.pop(context);
+                            onMarkCompletebuttonClicked(
+                                model, juzProgressModel, (fn) {}, context);
                           },
                           child: Text(
-                            'RESET',
+                            'Mark Complete',
                             style: TextStyle(
                                 color: AppColors.seconderyColor,
                                 fontWeight: FontWeight.bold),
@@ -200,6 +225,34 @@ class JuzCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  void onResetbuttonClicked(
+      juzCardModel model,
+      JuzProgressProvider juzProgressModel,
+      StateSetter innerSetState,
+      BuildContext context) {
+    if (model.isResetCheck) {}
+    // juzProgressModel.resetAllJuzProgress();
+    juzProgressModel.resetSelectedJuzProgress(juzNumber);
+    innerSetState(() {
+      model.resetJuzCheckMethod(false);
+    });
+    Navigator.pop(context);
+  }
+
+  void onMarkCompletebuttonClicked(
+      juzCardModel model,
+      JuzProgressProvider juzProgressModel,
+      StateSetter innerSetState,
+      BuildContext context) {
+    if (model.isResetCheck) {}
+    // juzProgressModel.resetAllJuzProgress();
+    juzProgressModel.markJuzComplete(juzNumber);
+    innerSetState(() {
+      model.resetJuzCheckMethod(false);
+    });
+    Navigator.pop(context);
   }
 
   Badge ContinueCard(int percentage) {
@@ -263,6 +316,4 @@ class JuzCard extends StatelessWidget {
       ),
     );
   }
-
-
 }
