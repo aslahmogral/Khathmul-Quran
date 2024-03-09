@@ -2,6 +2,7 @@
 // import 'package:daily_quran/references/screens/surah_screen/surah_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:khathmul_quran/juz_provider.dart';
 import 'package:khathmul_quran/juz_screen/juz_screen.dart';
 
 class juzCardModel with ChangeNotifier {
@@ -53,5 +54,35 @@ class juzCardModel with ChangeNotifier {
         ));
 
     notifyListeners();
+  }
+
+  void onResetbuttonClicked(
+      juzCardModel model,
+      JuzProgressProvider juzProgressModel,
+      StateSetter innerSetState,
+      BuildContext context) {
+    if (model.isResetCheck) {}
+    // juzProgressModel.resetAllJuzProgress();
+    juzProgressModel.resetSelectedJuzProgress(juzNumber);
+    innerSetState(() {
+      model.resetJuzCheckMethod(false);
+    });
+    isResetCheck = false;
+    Navigator.pop(context);
+  }
+
+  void onMarkCompletebuttonClicked(
+      juzCardModel model,
+      JuzProgressProvider juzProgressModel,
+      StateSetter innerSetState,
+      BuildContext context) {
+    if (model.isResetCheck) {}
+    // juzProgressModel.resetAllJuzProgress();
+    juzProgressModel.markJuzComplete(juzNumber);
+    innerSetState(() {
+      model.resetJuzCheckMethod(false);
+    });
+    isMarkCompletedCheck = false;
+    Navigator.pop(context);
   }
 }

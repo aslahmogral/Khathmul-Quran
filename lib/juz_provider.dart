@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class JuzData {
   final double progress;
   final int currentPage;
-  
 
   JuzData({required this.progress, required this.currentPage});
 }
@@ -22,6 +21,39 @@ class JuzProgressProvider extends ChangeNotifier {
     ),
   );
   bool shouldReset = false;
+
+  Map<int, int> totalVerseInJuz = {
+  1: 148,
+  2: 111,
+  3: 126,
+  4: 131,
+  5: 124,
+  6: 110,
+  7: 149,
+  8: 142,
+  9: 159,
+  10: 127,
+  11: 151,
+  12: 170,
+  13: 154,
+  14: 227,
+  15: 185,
+  16: 269,
+  17: 190,
+  18: 202,
+  19: 339,
+  20: 171,
+  21: 178,
+  22: 169,
+  23: 357,
+  24: 175,
+  25: 246,
+  26: 195,
+  27: 399,
+  28: 137,
+  29: 431,
+  30: 564,
+};
 
   void updateShouldReset(bool value) {
     shouldReset = value;
@@ -44,19 +76,7 @@ class JuzProgressProvider extends ChangeNotifier {
     _loadJuzProgressFromStorage();
   }
 
-  // void _loadJuzProgressFromStorage() {
-  //   for (int i = 1; i <= 30; i++) {
-  //     double progress = _prefs.getDouble('juz_${i}_progress') ?? 0.0;
-  //     int currentPage = _prefs.getInt('juz_${i}_currentPage') ?? 0;
-  //     _globalJuzMap[i] = JuzData(progress: progress, currentPage: currentPage);
-  //   }
-  // }
-
-  // void _saveJuzProgressToStorage(int juzNumber, double progress, int currentPage) {
-  //   _prefs.setDouble('juz_${juzNumber}_progress', progress);
-  //   _prefs.setInt('juz_${juzNumber}_currentPage', currentPage);
-  // }
-
+ 
   void _saveJuzProgressToStorage(
       int juzNumber, double progress, int currentPage) {
     _prefs.setDouble('juz_$juzNumber' '_progress', progress);
@@ -104,15 +124,20 @@ class JuzProgressProvider extends ChangeNotifier {
       _globalJuzMap[juzNumber] = JuzData(progress: 0.0, currentPage: 0);
       _saveJuzProgressToStorage(
           juzNumber, 0.0, 0); // Save reset progress to SharedPreferences
+          
       notifyListeners();
     }
   }
 
-   void markJuzComplete(int juzNumber) {
+  void markJuzComplete(int juzNumber) {
     if (_globalJuzMap.containsKey(juzNumber)) {
-      _globalJuzMap[juzNumber] = JuzData(progress: 100.0, currentPage: 0);
-       _saveJuzProgressToStorage(
-          juzNumber, 100.0, 0);
+      _globalJuzMap[juzNumber] =
+          JuzData(progress: 100.0, currentPage: totalVerseInJuz[juzNumber]!);
+      print('-----------------------------');
+      print(totalVerseInJuz[juzNumber]!);
+      print('-----------------------------');
+
+      _saveJuzProgressToStorage(juzNumber, 100.0, 0);
       notifyListeners();
     }
   }

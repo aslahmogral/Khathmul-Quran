@@ -186,7 +186,7 @@ class JuzCard extends StatelessWidget {
                                 AppColors.primaryColor),
                           ),
                           onPressed: () {
-                            onResetbuttonClicked(model, juzProgressModel,
+                            model.onResetbuttonClicked(model, juzProgressModel,
                                 innerSetState, context);
                           },
                           child: Text(
@@ -205,7 +205,7 @@ class JuzCard extends StatelessWidget {
                                 AppColors.primaryColor),
                           ),
                           onPressed: () {
-                            onMarkCompletebuttonClicked(
+                            model.onMarkCompletebuttonClicked(
                                 model, juzProgressModel, (fn) {}, context);
                           },
                           child: Text(
@@ -227,33 +227,7 @@ class JuzCard extends StatelessWidget {
     );
   }
 
-  void onResetbuttonClicked(
-      juzCardModel model,
-      JuzProgressProvider juzProgressModel,
-      StateSetter innerSetState,
-      BuildContext context) {
-    if (model.isResetCheck) {}
-    // juzProgressModel.resetAllJuzProgress();
-    juzProgressModel.resetSelectedJuzProgress(juzNumber);
-    innerSetState(() {
-      model.resetJuzCheckMethod(false);
-    });
-    Navigator.pop(context);
-  }
-
-  void onMarkCompletebuttonClicked(
-      juzCardModel model,
-      JuzProgressProvider juzProgressModel,
-      StateSetter innerSetState,
-      BuildContext context) {
-    if (model.isResetCheck) {}
-    // juzProgressModel.resetAllJuzProgress();
-    juzProgressModel.markJuzComplete(juzNumber);
-    innerSetState(() {
-      model.resetJuzCheckMethod(false);
-    });
-    Navigator.pop(context);
-  }
+  
 
   Badge ContinueCard(int percentage) {
     return Badge(
