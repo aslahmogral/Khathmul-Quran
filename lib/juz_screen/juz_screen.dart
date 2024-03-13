@@ -70,27 +70,28 @@ class JuzScreen extends StatelessWidget {
           SizedBox(
             width: 32,
           ),
-          model.currentPageAkaCurrentAyah == 0
-              ? QButton(
-                  buttonColor: Colors.transparent,
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black45,
-                  ),
-                  onPressed: () {
-                    print('null');
-                    model.onBackwardButtonClicked();
-                  },
-                )
-              : QButton(
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.seconderyColor,
-                  ),
-                  onPressed: () {
-                    model.onBackwardButtonClicked();
-                  },
-                ),
+          // model.currentPageAkaCurrentAyah == 0
+          //     ? QButton(
+          //         buttonColor: Colors.transparent,
+          //         child: Icon(
+          //           Icons.arrow_back_ios,
+          //           color: Colors.black45,
+          //         ),
+          //         onPressed: () {
+          //           print('null');
+          //           model.onBackwardButtonClicked();
+          //         },
+          //       )
+          //     :
+          QButton(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.seconderyColor,
+            ),
+            onPressed: () {
+              model.onBackwardButtonClicked();
+            },
+          ),
           //left button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           Spacer(), //middle iam done button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -107,13 +108,16 @@ class JuzScreen extends StatelessWidget {
                     // print(yaseenList().length);
                     // model.onExitButtonClicked(context);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'I AM DONE',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.seconderyColor),
+                  child: Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'I AM DONE',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.seconderyColor),
+                      ),
                     ),
                   ),
                 )
@@ -131,11 +135,17 @@ class JuzScreen extends StatelessWidget {
                       // );
                       model.onExitButtonClicked(context, juzProgressModel);
                     },
-                    child: Text(
-                      'I AM DONE',
-                      style: TextStyle(
-                          color: AppColors.seconderyColor,
-                          fontWeight: FontWeight.bold),
+                    child: Card(
+                      color: AppColors.seconderyColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'I AM DONE',
+                          style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   );
                 }),
