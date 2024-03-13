@@ -63,9 +63,4 @@ class JuzScreenModel with ChangeNotifier {
     );
     print('exit');
   }
-
-  skip() {
-    pageController.jumpToPage(141);
-    notifyListeners();
-  }
 }

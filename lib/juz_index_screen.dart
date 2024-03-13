@@ -20,7 +20,7 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 251, 243, 220),
+      // backgroundColor: Color.fromARGB(255, 251, 243, 220),
       appBar: AppBar(
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,11 +30,11 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
           ],
         ),
         centerTitle: true,
-        backgroundColor: AppColors.primaryColor,
+        // backgroundColor: AppColors.primaryColor,
         title: Text(
           'Khathmul Quran',
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: AppColors.seconderyColor),
+              fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
         actions: [
           // Consumer<JuzProgressProvider>(
@@ -55,6 +55,55 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: [
+                Card(
+                  color: AppColors.primaryColor.withOpacity(0.5),
+                  child: Container(
+                    height: 80,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '34 %',
+                                style: TextStyle(
+                                    color: AppColors.seconderyColor,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    resetButtonClicked(
+                                        context, juzProgressModel);
+                                  },
+                                  icon: Icon(Icons.restart_alt))
+                            ],
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          SizedBox(
+                            height: 10,
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                              color: AppColors.seconderyColor,
+                              value: 0.34,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
                 GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount:
@@ -76,25 +125,6 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
                     );
                   },
                 ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(AppColors.primaryColor),
-                    ),
-                    onPressed: () {
-                      resetButtonClicked(context, juzProgressModel);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'RESET',
-                          style: TextStyle(
-                              color: AppColors.seconderyColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ))
               ],
             ),
           ),
