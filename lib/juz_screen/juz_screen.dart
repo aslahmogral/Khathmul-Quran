@@ -28,35 +28,41 @@ class JuzScreen extends StatelessWidget {
             create: (_) => JuzScreenModel(juzNumber, context)),
       ],
       child: Consumer<JuzScreenModel>(builder: (context, model, child) {
-        return WillPopScope(
-          onWillPop: () {
-            return Future(() => false);
-          },
-          child: Scaffold(
-            body: PageView(
-              controller: model.pageController,
-              children: [...AyahList(context, model)],
-              physics: NeverScrollableScrollPhysics(),
+        return Consumer<JuzProgressProvider>(
+            builder: (context, juzProgressModel, child) {
+          return WillPopScope(
+            onWillPop: () {
+              return Future(() {
+                model.onExitButtonClicked(context, juzProgressModel);
+                return false;
+              });
+            },
+            child: Scaffold(
+              body: PageView(
+                controller: model.pageController,
+                children: [...AyahList(context, model)],
+                physics: NeverScrollableScrollPhysics(),
+              ),
+              floatingActionButton: bottomButtons(model, context),
+              // bottomNavigationBar: Padding(
+              //   padding: const EdgeInsets.all(16.0),
+              //   child: Container(
+              //     color: Colors.transparent,
+
+              //     height: 180,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         //left button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+              //         //right button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ),
-            floatingActionButton: bottomButtons(model, context),
-            // bottomNavigationBar: Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: Container(
-            //     color: Colors.transparent,
-
-            //     height: 180,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         //left button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-            //         //right button ------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //       ],
-            //     ),
-            //   ),
-            // ),
-          ),
-        );
+          );
+        });
       }),
     );
   }
