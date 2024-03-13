@@ -51,55 +51,53 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
       body: Consumer<JuzProgressProvider>(
           builder: (context, juzProgressModel, child) {
         return SingleChildScrollView(
-          child:Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 16),
-                  child: Column(
-                    children: [
-                      GridView.builder(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              4, // You can adjust the number of columns as needed
-                          crossAxisSpacing: 1.0,
-                          mainAxisSpacing: 1.0,
-                        ),
-                        itemCount: juzProgressModel?.juzList.length,
-                        shrinkWrap: true,
-                        physics:
-                            NeverScrollableScrollPhysics(), // to prevent scrolling of GridView within SingleChildScrollView
-                        itemBuilder: (context, index) {
-                          return GridTile(
-                            child: Container(
-                              // Your content for each grid item here
-                              child: juzProgressModel.juzList[
-                                  index], // Replace YourWidget with your actual widget
-                            ),
-                          );
-                        },
-                      ),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                AppColors.primaryColor),
-                          ),
-                          onPressed: () {
-                            resetButtonClicked(context, juzProgressModel);
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'RESET',
-                                style: TextStyle(
-                                    color: AppColors.seconderyColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ))
-                    ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: [
+                GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:
+                        4, // You can adjust the number of columns as needed
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 1.0,
                   ),
+                  itemCount: juzProgressModel.juzList.length,
+                  shrinkWrap: true,
+                  physics:
+                      NeverScrollableScrollPhysics(), // to prevent scrolling of GridView within SingleChildScrollView
+                  itemBuilder: (context, index) {
+                    return GridTile(
+                      child: Container(
+                        // Your content for each grid item here
+                        child: juzProgressModel.juzList[
+                            index], // Replace YourWidget with your actual widget
+                      ),
+                    );
+                  },
                 ),
+                ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(AppColors.primaryColor),
+                    ),
+                    onPressed: () {
+                      resetButtonClicked(context, juzProgressModel);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'RESET',
+                          style: TextStyle(
+                              color: AppColors.seconderyColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ))
+              ],
+            ),
+          ),
         );
       }),
     );
@@ -192,5 +190,4 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
       },
     );
   }
-
 }
