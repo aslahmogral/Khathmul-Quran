@@ -20,33 +20,13 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color.fromARGB(255, 251, 243, 220),
       appBar: AppBar(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.account_circle),
-          ],
-        ),
         centerTitle: true,
-        // backgroundColor: AppColors.primaryColor,
         title: Text(
           'Khathmul Quran',
           style: TextStyle(
               fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
-        actions: [
-          // Consumer<JuzProgressProvider>(
-          //     builder: (context, juzProgressModel, child) {
-          //   return IconButton(
-          //       onPressed: () {
-          //         juzProgressModel.resetAllJuzProgress();
-          //       },
-          //       icon: Icon(Icons.reset_tv));
-          // }),
-          // Icon(Icons.more_vert),
-        ],
       ),
       body: Consumer<JuzProgressProvider>(
           builder: (context, juzProgressModel, child) {
@@ -67,7 +47,7 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                '34 %',
+                                '${juzProgressModel.totalProgressOfJuz.toStringAsFixed(1).toString()} %',
                                 style: TextStyle(
                                     color: AppColors.seconderyColor,
                                     fontSize: 26,
@@ -93,7 +73,7 @@ class _JuzIndexScreenState extends State<JuzIndexScreen> {
                                 Radius.circular(6),
                               ),
                               color: AppColors.seconderyColor,
-                              value: 0.34,
+                              value: juzProgressModel.totalProgressOfJuz/100,
                             ),
                           )
                         ],

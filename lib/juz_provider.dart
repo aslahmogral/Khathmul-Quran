@@ -12,7 +12,7 @@ class JuzData {
 }
 
 class JuzProgressProvider extends ChangeNotifier {
-  late Map<int, JuzData> _globalJuzMap;
+  late Map<int, JuzData> globalJuzMap;
   late SharedPreferences _prefs;
   List<JuzCard> juzList = List.generate(
     30,
@@ -21,39 +21,40 @@ class JuzProgressProvider extends ChangeNotifier {
     ),
   );
   bool shouldReset = false;
+  double totalProgressOfJuz = 0;
 
   Map<int, int> totalVerseInJuz = {
-  1: 148,
-  2: 111,
-  3: 126,
-  4: 131,
-  5: 124,
-  6: 110,
-  7: 149,
-  8: 142,
-  9: 159,
-  10: 127,
-  11: 151,
-  12: 170,
-  13: 154,
-  14: 227,
-  15: 185,
-  16: 269,
-  17: 190,
-  18: 202,
-  19: 339,
-  20: 171,
-  21: 178,
-  22: 169,
-  23: 357,
-  24: 175,
-  25: 246,
-  26: 195,
-  27: 399,
-  28: 137,
-  29: 431,
-  30: 564,
-};
+    1: 148,
+    2: 111,
+    3: 126,
+    4: 131,
+    5: 124,
+    6: 110,
+    7: 149,
+    8: 142,
+    9: 159,
+    10: 127,
+    11: 151,
+    12: 170,
+    13: 154,
+    14: 227,
+    15: 185,
+    16: 269,
+    17: 190,
+    18: 202,
+    19: 339,
+    20: 171,
+    21: 178,
+    22: 169,
+    23: 357,
+    24: 175,
+    25: 246,
+    26: 195,
+    27: 399,
+    28: 137,
+    29: 431,
+    30: 564,
+  };
 
   void updateShouldReset(bool value) {
     shouldReset = value;
@@ -63,10 +64,11 @@ class JuzProgressProvider extends ChangeNotifier {
   JuzProgressProvider() {
     _initializeJuzMap();
     _initSharedPreferences();
+    // calculateTotalProgress();
   }
 
   void _initializeJuzMap() {
-    _globalJuzMap = {
+    globalJuzMap = {
       for (int i = 1; i <= 30; i++) i: JuzData(progress: 0.0, currentPage: 0),
     };
   }
@@ -74,9 +76,9 @@ class JuzProgressProvider extends ChangeNotifier {
   void _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
     _loadJuzProgressFromStorage();
+    calculateTotalProgress();
   }
 
- 
   void _saveJuzProgressToStorage(
       int juzNumber, double progress, int currentPage) {
     _prefs.setDouble('juz_$juzNumber' '_progress', progress);
@@ -87,58 +89,73 @@ class JuzProgressProvider extends ChangeNotifier {
     for (int i = 1; i <= 30; i++) {
       double progress = _prefs.getDouble('juz_$i' '_progress') ?? 0.0;
       int currentPage = _prefs.getInt('juz_$i' '_currentPage') ?? 0;
-      _globalJuzMap[i] = JuzData(progress: progress, currentPage: currentPage);
+      globalJuzMap[i] = JuzData(progress: progress, currentPage: currentPage);
     }
+    calculateTotalProgress();
     notifyListeners();
   }
 
   void updateJuzProgress(int juzNumber, double progress, int currentPage) {
-    if (_globalJuzMap.containsKey(juzNumber)) {
-      _globalJuzMap[juzNumber] =
+    if (globalJuzMap.containsKey(juzNumber)) {
+      globalJuzMap[juzNumber] =
           JuzData(progress: progress, currentPage: currentPage);
       _saveJuzProgressToStorage(juzNumber, progress, currentPage);
+      calculateTotalProgress();
       notifyListeners();
     }
   }
 
   double getJuzProgress(int juzNumber) {
-    return _globalJuzMap.containsKey(juzNumber)
-        ? _globalJuzMap[juzNumber]!.progress
+    return globalJuzMap.containsKey(juzNumber)
+        ? globalJuzMap[juzNumber]!.progress
         : 0.0;
   }
 
   int getJuzCurrentPage(int juzNumber) {
-    return _globalJuzMap.containsKey(juzNumber)
-        ? _globalJuzMap[juzNumber]!.currentPage
+    return globalJuzMap.containsKey(juzNumber)
+        ? globalJuzMap[juzNumber]!.currentPage
         : 0;
   }
 
   void resetAllJuzProgress() {
     _initializeJuzMap();
     _prefs.clear(); // Clear SharedPreferences to reset the saved data
+    calculateTotalProgress();
     notifyListeners();
   }
 
   void resetSelectedJuzProgress(int juzNumber) {
-    if (_globalJuzMap.containsKey(juzNumber)) {
-      _globalJuzMap[juzNumber] = JuzData(progress: 0.0, currentPage: 0);
+    if (globalJuzMap.containsKey(juzNumber)) {
+      globalJuzMap[juzNumber] = JuzData(progress: 0.0, currentPage: 0);
       _saveJuzProgressToStorage(
           juzNumber, 0.0, 0); // Save reset progress to SharedPreferences
-          
+      calculateTotalProgress();
       notifyListeners();
     }
   }
 
   void markJuzComplete(int juzNumber) {
-    if (_globalJuzMap.containsKey(juzNumber)) {
-      _globalJuzMap[juzNumber] =
+    if (globalJuzMap.containsKey(juzNumber)) {
+      globalJuzMap[juzNumber] =
           JuzData(progress: 100.0, currentPage: totalVerseInJuz[juzNumber]!);
-      print('-----------------------------');
-      print(totalVerseInJuz[juzNumber]!);
-      print('-----------------------------');
-
       _saveJuzProgressToStorage(juzNumber, 100.0, 0);
+      calculateTotalProgress();
       notifyListeners();
     }
+  }
+
+  calculateTotalProgress() {
+    var valueList = globalJuzMap.values.toList();
+    var progressValueList = [];
+    valueList.forEach(
+      (element) {
+        progressValueList.add(element.progress);
+      },
+    );
+    double sum = progressValueList.fold(
+        0, (previousValue, element) => previousValue + element);
+    totalProgressOfJuz = (sum / 3000) * 100;
+    notifyListeners();
+    print(valueList);
   }
 }
