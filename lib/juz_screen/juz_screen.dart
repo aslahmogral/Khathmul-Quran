@@ -236,7 +236,7 @@ class JuzScreen extends StatelessWidget {
                         badgeContent: Text(
                           '$percentage %',
                           style: TextStyle(
-                              fontSize: 6, fontWeight: FontWeight.bold),
+                              fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                         badgeStyle: badges.BadgeStyle(
                             badgeColor: AppColors.seconderyColor),
